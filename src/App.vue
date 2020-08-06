@@ -29,4 +29,17 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
+.container {
+  width:100% !important;
+}
+
+.col-7{
+  text-align: left !important;
+}
+
+.col-5{
+  display: flex;
+  justify-content: space-evenly;
+}
 </style>

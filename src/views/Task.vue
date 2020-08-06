@@ -1,26 +1,54 @@
-<template>
-    <li>
-        <div>
-           {{ task.name }} 
-           {{index}} 
-            <small> {{ task.dueDate }} @ {{ task.dueTime }} </small>
-            <button @click="deleteTask(index)">X</button>
-        </div>
+<template>    
+    <li @click="updateTask({ id: index,  updates: { completed: !task.completed }})">  
+        <b-container>   
+            <b-row>     
+                <b-col cols="7" align-v="start">
+                    <b-form-checkbox  v-model="task.completed">
+                        <span>
+                             {{ task.name }} 
+                        </span>                       
+                    </b-form-checkbox>  
+                </b-col> 
+                <b-col cols="5" align-v="end">
+                    <span>
+                        <b-icon-calendar variant="dark"></b-icon-calendar>
+                        {{ task.dueDate }} 
+                    </span>
+                    <span>
+                        <b-icon-clock variant="secondary"></b-icon-clock>
+                        {{ task.dueTime }} 
+                    </span>                   
+                    <b-icon icon="x-circle-fill" scale="1.5" variant="danger"  
+                     @click="showDeletePopUp(index)"></b-icon>                            
+                </b-col>        
+            </b-row>
+        </b-container>
     </li>    
 </template>
 
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { State, Getter, Action, Mutation } from 'vuex-class'
 
 @Component
 export default class Task extends Vue {
     @Prop() task!: object;
     @Prop() index!: number;
-    @Prop() deleteTask!: Function;
+    @Prop() updateTask!: Function;
+    @Getter('tasks/tasks') tasks!: object;
+    @Action('tasks/deleteTask') deleteTask!: Function; 
 
-    private mounted(){
-        console.log(this.task);
-    }
+    private showDeletePopUp(id: string) {       
+        this.$bvModal.msgBoxConfirm('Are you sure you want to delete ')
+          .then(value => {
+              if(value){
+                  this.deleteTask(id);
+              }           
+          })
+          .catch(err => {
+             console.log(err.toString());
+          })
+    }    
 }
 </script>

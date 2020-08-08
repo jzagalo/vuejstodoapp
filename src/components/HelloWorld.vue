@@ -5,28 +5,20 @@
               :task="task" :index="index" :updateTask="updateTask" 
               :class="task.completed ? 'green': 'gray'" />                                
     </ul>
+   
     <div class="button-wrapper"> 
         <b-button pill variant="danger" @click="showAddTask = !showAddTask">Add Todo</b-button>      
         <b-modal title="Add Todo" @show="resetModal" @hidden="resetModal"  @ok="handleOk"  v-model="showAddTask">
          <b-form @submit.prevent="onSubmit"  >
-         <div>    
-           <b-form-input v-model="taskToMessage.name" placeholder="Task Name">
-            </b-form-input>
-         </div>
-          <br/>
-          <div>  
-            <b-form-datepicker v-model="taskToMessage.dueDate" placeholder="Task Date">
-            </b-form-datepicker>
-          </div>
-          <br/>
-          <div>    
-           <b-form-timepicker v-model="taskToMessage.dueTime" type="time" id="type-time"           
-           placeholder="Task Date">
-          </b-form-timepicker>
-         </div>
+            <ModalTaskName :name.sync="taskToMessage.name" /> 
+            <ModalDueDate :dueDate.sync="taskToMessage.dueDate" />
+            <ModalTaskTime 
+              :dueTime.sync="taskToMessage.dueTime"
+              :dueTimeProp="taskToMessage.dueDate" />
          </b-form>  
-         </b-modal>
-    </div>    
+         </b-modal>         
+    </div>   
+     {{ taskToMessage }} 
   </div>
 </template>
 
@@ -34,6 +26,9 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Task from '@/views/Task.vue';
 import { State, Getter, Action, Mutation } from 'vuex-class';
+import ModalTaskName from '@/components/Shared/ModalTaskName.vue';
+import ModalDueDate from '@/components/Shared/ModalDueDate.vue';
+import ModalTaskTime from '@/components/Shared/ModalTaskTime.vue';
 
 
 type TaskObject = { id: number; name: string; completed: boolean };
@@ -41,6 +36,9 @@ type TaskObject = { id: number; name: string; completed: boolean };
 @Component({
   components: {
     Task,
+    ModalTaskName,
+    ModalDueDate,
+    ModalTaskTime,
   }
 })
 export default class HelloWorld extends Vue {
@@ -60,7 +58,12 @@ export default class HelloWorld extends Vue {
   }
 
   private resetModal(){
-    console.log("");
+    this.taskToMessage = {
+       name: '',
+       dueDate: '',
+       dueTime: '',
+       completed: false,
+    };
   }
 
   private handleOk(){

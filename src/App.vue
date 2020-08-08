@@ -34,11 +34,11 @@
   width:100% !important;
 }
 
-.col-7{
+.col-5{
   text-align: left !important;
 }
 
-.col-5{
+.col-7{
   display: flex;
   justify-content: space-evenly;
 }

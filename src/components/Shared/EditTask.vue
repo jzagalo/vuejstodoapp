@@ -1,30 +1,15 @@
-<template>
-  <div class="hello">
-    <ul>
-        <Task v-for="(task,index) in tasks" :key="index" 
-              :task="task" :index="index" :updateTask="updateTask" 
-              :class="task.completed ? 'green': 'gray'" />                                
-    </ul>
-   
-    <div class="button-wrapper"> 
-        <b-button pill variant="danger" @click="showAddTask = !showAddTask">Add Todo</b-button>      
-        <b-modal title="Add Todo" @show="resetModal" @hidden="resetModal"  @ok="handleOk" v-model="showAddTask">
-         <b-form @submit.prevent="onSubmit">
-            <ModalTaskName :name.sync="taskToMessage.name" /> 
-            <ModalDueDate :dueDate.sync="taskToMessage.dueDate" />
-            <ModalTaskTime 
-              :dueTime.sync="taskToMessage.dueTime"
-              :dueTimeProp="taskToMessage.dueDate" />
-         </b-form>  
-         </b-modal>   
-          
-    </div>    
-  </div>
+<template>       
+    <b-form @submit.prevent="onSubmit"  >
+        <ModalTaskName :name.sync="taskToMessage.name" /> 
+        <ModalDueDate :dueDate.sync="taskToMessage.dueDate" />
+        <ModalTaskTime 
+            :dueTime.sync="taskToMessage.dueTime"
+            :dueTimeProp="taskToMessage.dueDate" />
+    </b-form>  
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import Task from '@/views/Task.vue';
 import { State, Getter, Action, Mutation } from 'vuex-class';
 import ModalTaskName from '@/components/Shared/ModalTaskName.vue';
 import ModalDueDate from '@/components/Shared/ModalDueDate.vue';
@@ -33,28 +18,22 @@ import ModalTaskTime from '@/components/Shared/ModalTaskTime.vue';
 type TaskObject = { id: number; name: string; completed: boolean };
 
 @Component({
-  components: {
-    Task,
+  components: {   
     ModalTaskName,
     ModalDueDate,
     ModalTaskTime,
-
   }
 })
 export default class HelloWorld extends Vue {
+  @Prop() private id!: string;
+  @Prop() private task!: TaskObject;  
   @Getter('tasks/tasks') tasks!: object;
   @Action('tasks/updateTask') updateTask!: Function; 
-  @Action('tasks/addTask') addTask!: Function;  
-  private showAddTask = false;
-  private taskToMessage = {
-      name: '',
-      dueDate: '',
-      dueTime: '',
-      completed: false,
-  };
 
+  private showAddTask = false;
+  private taskToMessage = {};
   private toggleComplete(task: TaskObject){
-    task.completed = !task.completed;    
+    task.completed =! task.completed;    
   }
 
   private resetModal(){
@@ -67,7 +46,12 @@ export default class HelloWorld extends Vue {
   }
 
   private handleOk(){
-    this.addTask(this.taskToMessage);
+    console.log('ZZZZ');    
+  }
+
+  mounted(){
+    this.taskToMessage = Object.assign({}, this.task);
+    console.log(this.taskToMessage);
   }
 
 }

@@ -14,7 +14,7 @@
 import { Vue, Prop, Component } from 'vue-property-decorator';
 
 
-@Component
+@Component({ })
 export default class ModalDueDate extends Vue {
     @Prop() private dueDate!: Date;
 

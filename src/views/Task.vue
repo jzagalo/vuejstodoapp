@@ -12,7 +12,7 @@
                 <b-col cols="7" align-v="end">
                     <span>
                         <b-icon-calendar variant="dark"></b-icon-calendar>
-                        {{ task.dueDate }} 
+                        {{ task.dueDate | dateFormat }} 
                     </span>
                     <span>
                         <b-icon-clock variant="secondary"></b-icon-clock>
@@ -27,7 +27,7 @@
                             icon="pencil" 
                             scale="1.5" 
                             variant="danger"
-                            @click="showEditTask = true"                            
+                            @click.stop="showEditTask = true"                            
                             ></b-icon>
                     </span>
                     <b-modal title="Add Todo"  v-model="showEditTask">
@@ -50,6 +50,12 @@ import EditTask from '@/components/Shared/EditTask.vue';
     components: {
         EditTask,
     },
+    filters: {
+    dateFormat: function(value: any){
+      if(!value) return '';
+      return value.toString().split("00:00:00")[0];
+    },
+  },
 })
 export default class Task extends Vue {
     @Prop() task!: object;

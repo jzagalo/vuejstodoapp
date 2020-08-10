@@ -15,7 +15,10 @@ import ModalTaskName from '@/components/Shared/ModalTaskName.vue';
 import ModalDueDate from '@/components/Shared/ModalDueDate.vue';
 import ModalTaskTime from '@/components/Shared/ModalTaskTime.vue';
 
-type TaskObject = { id: number; name: string; completed: boolean };
+type TaskObject = { name: string; dueDate: Date; dueTime: string; completed: boolean };
+const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", 
+            "September", "October", "November", "December"];
 
 @Component({
   components: {   
@@ -49,9 +52,9 @@ export default class HelloWorld extends Vue {
     console.log('ZZZZ');    
   }
 
-  mounted(){
-    this.taskToMessage = Object.assign({}, this.task);
-    console.log(this.taskToMessage);
+  mounted(){   
+    this.task.dueDate = new Date(this.task.dueDate);   
+    this.taskToMessage = Object.assign({}, this.task);   
   }
 
 }

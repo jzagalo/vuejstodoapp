@@ -4,8 +4,7 @@
         <Task v-for="(task,index) in tasks" :key="index" 
               :task="task" :index="index" :updateTask="updateTask" 
               :class="task.completed ? 'green': 'gray'" />                                
-    </ul>
-   
+    </ul>   
     <div class="button-wrapper"> 
         <b-button pill variant="danger" @click="showAddTask = !showAddTask">Add Todo</b-button>      
         <b-modal title="Add Todo" @show="resetModal" @hidden="resetModal"  @ok="handleOk" v-model="showAddTask">
@@ -38,7 +37,6 @@ type TaskObject = { id: number; name: string; completed: boolean };
     ModalTaskName,
     ModalDueDate,
     ModalTaskTime,
-
   }
 })
 export default class HelloWorld extends Vue {
